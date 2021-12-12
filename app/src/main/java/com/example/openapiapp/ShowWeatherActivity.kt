@@ -15,10 +15,33 @@ class ShowWeatherActivity: AppCompatActivity() {
 
         // Get the Intent that started this activity and extract the string
         val message = intent.getStringExtra(EXTRA_MESSAGE)
+        val cityMessage = intent.getStringExtra("City")
+        val temp = intent.getStringExtra("Temp")
 
         // Capture the layout's TextView and set the string as its text
-        val todayforcast = findViewById<TextView>(R.id.todayforcast).apply {
+        val todaytemp = findViewById<TextView>(R.id.todaytemp).apply {
+            text = temp
+        }
+        val city = findViewById<TextView>(R.id.city).apply {
+            text = cityMessage
+        }
+
+        val description = findViewById<TextView>(R.id.desc).apply {
             text = message
         }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy(){
+        super.onDestroy()
     }
 }
