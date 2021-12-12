@@ -32,65 +32,65 @@ class MainActivity : AppCompatActivity() {
         lateinit var cityName: EditText
         lateinit var city:String
     lateinit var temp: String
+    lateinit var str3: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         val button = findViewById<Button>(R.id.getforcastbtn)
         button.setOnClickListener {
             doAsync {
+
                 RunRequest()
 
-                //uiThread {
-                    //longToast("")
-               // }
             }
+
         }
     }
 
 
 
      fun RunRequest(){
-
          cityName = findViewById<EditText>(R.id.cityname)
          city = cityName.text.toString().trim()
 
-        val str1 = "https://api.openweathermap.org/data/2.5/weather?q="
-        //val str2 = "&appid=6bb0e04941e82a1e0d4ed117806f60be"
-         val str2 = "&units=metric&cnt=7&appid=6bb0e04941e82a1e0d4ed117806f60be"
-        val sb = StringBuilder()
-        sb.append(str1).append(city).append(str2)
-        val str3 = sb.toString()
-        Log.d("URL Report1", str3)
-        lifecycleScope.launchWhenCreated {
-            withContext(Dispatchers.IO) {
-                // network call
-                val cityResult = URL(str3).readText(Charset.forName("ISO-8859-1"))
-                Log.d("URL Report", cityResult)
-                val jsonObj = JSONObject(cityResult)
-                val main = jsonObj.getJSONObject("main")
-                temp = main.getString("temp") + "°C"
-                val min_temp = main.getString("temp_min") + "°C"
-                val max_temp = main.getString("temp_max") + "°C"
-                message = "Current Tempereature in " + city +" is " + temp+
-                        ", min current temperature is " + min_temp + ", max current temperature is " +
-                        max_temp
-               Log.d("Message supposed", message)
+         val str1 = "https://api.openweathermap.org/data/2.5/weather?q="
+         val str2 = "&appid=6bb0e04941e82a1e0d4ed117806f60be"
+         //val str2 = "&units=metric&cnt=7&appid=6bb0e04941e82a1e0d4ed117806f60be"
+         val sb = StringBuilder()
+         sb.append(str1).append(city).append(str2)
+         str3 = sb.toString()
+         Log.d("URL Report1", str3)
 
-            }
-        }
+         lifecycleScope.launchWhenCreated {
+             withContext(Dispatchers.IO) {
+                 // network call
+                 val cityResult = URL(str3).readText(Charset.forName("ISO-8859-1"))
+                 Log.d("URL Report", cityResult)
+                 val jsonObj = JSONObject(cityResult)
+                 val main = jsonObj.getJSONObject("main")
+                 temp = main.getString("temp") + "°C"
+                 val min_temp = main.getString("temp_min") + "°C"
+                 val max_temp = main.getString("temp_max") + "°C"
+                 message = "Current Tempereature in " + city +" is " + temp+
+                         ", min current temperature is " + min_temp + ", max current temperature is " +
+                         max_temp
+                 Log.d("Message supposed", message)
 
-         Log.d("Message supposedantent",  message)
-        val intent = Intent(this, ShowWeatherActivity::class.java).apply {
-            putExtra("City", city)
-            putExtra("Temp", temp)
-            putExtra(EXTRA_MESSAGE, message)
-        }
-        startActivity(intent)
 
-    }
+             }
+         }
+
+         Log.d("Message onbtnclicked",  message)
+         val intent = Intent(this, ShowWeatherActivity::class.java).apply {
+             putExtra("City", city)
+             putExtra("Temp", temp)
+             putExtra(EXTRA_MESSAGE, message)
+         }
+         startActivity(intent)
+
+     }
 
     override fun onPause() {
         super.onPause()
